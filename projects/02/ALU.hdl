@@ -43,38 +43,30 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
-   Not16(in=x, out=notx);
-   Mux16(a=x, b[0]=false, sel=zx, out=x2);
-   Mux16(a=x2, b=notx, sel=nx, out=x3);
+   Mux16(a=x, b[0]=false, sel=zx, out=x1);
+   Not16(in=x1, out=notx1);
+   Mux16(a=x1, b=notx1, sel=nx, out=x2);
 
-   Not16(in=y, out=noty);
-   Mux16(a=y, b[0]=false, sel=zy, out=y2);
-   Mux16(a=y2, b=noty, sel=ny, out=y3);
+   Mux16(a=y, b[0]=false, sel=zy, out=y1);
+   Not16(in=y1, out=noty1);
+   Mux16(a=y1, b=noty1, sel=ny, out=y2);
 
-   Add16(a=x3, b=y3, out=xplusy);
-   And16(a=x3, b=y3, out=xandy);
+   Add16(a=x2, b=y2, out=xplusy);
+   And16(a=x2, b=y2, out=xandy);
    Mux16(a=xandy, b=xplusy, sel=f, out=out2);
 
    Not16(in=out2, out=notout);
    Mux16(a=out2, b=notout, sel=no, out=out3);
 
-   // out3[0] gives error:
-   // sub bus of internal node must not be used
-   // And(a=out3[0], b=true, out=mostsigbittrue);
-   // Mux16(a=false, b=true, sel=mostsigbittrue, out=ng);
-
-   // need to check only the most significant bit, 
-   // but out3[0] gives error:
-   // sub bus of internal node must not be used
-   And16(a=out3, b[0..15]=true, out[0]=ng);
+   And16(a=out3, b[0..15]=true, out[15]=ng);
 
    And16(a=out3, b[0..15]=true, out=out);
 
-   Or16(a=out3, b[0..7]=true, out[0..7]=lefthalf);
-   Or16(a=out3, b[8..15]=true, out[8..15]=righthalf);
-
+   And16(a=out3, b[0..7]=true, out[0..7]=lefthalf);
+   And16(a=out3, b[8..15]=true, out[8..15]=righthalf);
    Or8Way(in=lefthalf, out=or1);
    Or8Way(in=righthalf, out=or2);
-   Or(a=or1, b=or2, out=zr);
+   Or(a=or1, b=or2, out=zr1);
+   Not(in=zr1, out=zr);
 
 }
