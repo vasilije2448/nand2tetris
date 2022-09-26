@@ -15,6 +15,22 @@ CHIP PC {
     IN in[16],load,inc,reset;
     OUT out[16];
 
+
     PARTS:
     // Put your code here:
+    Mux16(a=r1, b[0..15]=false, sel=reset, out=out1);
+    // reset control bits if needed
+    Mux(a=load, b=false, sel=reset, out=load1);
+    Mux(a=inc, b=false, sel=reset, out=inc1);
+
+    Mux16(a=out1, b=in, sel=load1, out=out2);
+    // reset control bits if needed
+    Mux(a=inc1, b=false, sel=load1, out=inc2);
+
+    Inc16(in=r1, out=oldOutPlus1);
+    Mux16(a=out2, b=oldOutPlus1, sel=inc2, out=out3);
+
+    Register(in=out3, load=true, out=r1); // save out for the next time step
+    
+    And16(a=r1, b[0..15]=true, out=out);
 }

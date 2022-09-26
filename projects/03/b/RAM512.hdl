@@ -16,4 +16,24 @@ CHIP RAM512 {
 
     PARTS:
     // Put your code here:
+    DMux8Way(in=true, sel=address[0..2], a=l1, b=l2, c=l3, d=l4, e=l5, f=l6, g=l7, h=l8);
+    And(a=l1, b=load, out=l1p);
+    And(a=l2, b=load, out=l2p);
+    And(a=l3, b=load, out=l3p);
+    And(a=l4, b=load, out=l4p);
+    And(a=l5, b=load, out=l5p);
+    And(a=l6, b=load, out=l6p);
+    And(a=l7, b=load, out=l7p);
+    And(a=l8, b=load, out=l8p);
+
+    RAM64(in=in, load=l1p, address=address[3..8], out=out1);
+    RAM64(in=in, load=l2p, address=address[3..8], out=out2);
+    RAM64(in=in, load=l3p, address=address[3..8], out=out3);
+    RAM64(in=in, load=l4p, address=address[3..8], out=out4);
+    RAM64(in=in, load=l5p, address=address[3..8], out=out5);
+    RAM64(in=in, load=l6p, address=address[3..8], out=out6);
+    RAM64(in=in, load=l7p, address=address[3..8], out=out7);
+    RAM64(in=in, load=l8p, address=address[3..8], out=out8);
+
+    Mux8Way16(a=out1, b=out2, c=out3, d=out4, e=out5, f=out6, g=out7, h=out8, sel=address[0..2], out=out);
 }

@@ -16,4 +16,30 @@ CHIP RAM8 {
 
     PARTS:
     // Put your code here:
+
+    // find load value for each register
+    // only the one represented by address is set to true
+    DMux8Way(in=true, sel=address, a=l1, b=l2, c=l3, d=l4, e=l5, f=l6, g=l7, h=l8);
+
+    // if input load is false, set load value for each register to false
+    And(a=l1, b=load, out=l1p);
+    And(a=l2, b=load, out=l2p);
+    And(a=l3, b=load, out=l3p);
+    And(a=l4, b=load, out=l4p);
+    And(a=l5, b=load, out=l5p);
+    And(a=l6, b=load, out=l6p);
+    And(a=l7, b=load, out=l7p);
+    And(a=l8, b=load, out=l8p);
+
+    Register(in=in, load=l1p, out=out1);
+    Register(in=in, load=l2p, out=out2);
+    Register(in=in, load=l3p, out=out3);
+    Register(in=in, load=l4p, out=out4);
+    Register(in=in, load=l5p, out=out5);
+    Register(in=in, load=l6p, out=out6);
+    Register(in=in, load=l7p, out=out7);
+    Register(in=in, load=l8p, out=out8);
+
+    Mux8Way16(a=out1, b=out2, c=out3, d=out4, e=out5, f=out6, g=out7, h=out8, sel=address, out=out);
+
 }

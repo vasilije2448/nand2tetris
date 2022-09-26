@@ -16,4 +16,16 @@ CHIP RAM16K {
 
     PARTS:
     // Put your code here:
+    DMux4Way(in=true, sel=address[0..1], a=l1, b=l2, c=l3, d=l4);
+    And(a=l1, b=load, out=l1p);
+    And(a=l2, b=load, out=l2p);
+    And(a=l3, b=load, out=l3p);
+    And(a=l4, b=load, out=l4p);
+
+    RAM4K(in=in, load=l1p, address=address[2..13], out=out1);
+    RAM4K(in=in, load=l2p, address=address[2..13], out=out2);
+    RAM4K(in=in, load=l3p, address=address[2..13], out=out3);
+    RAM4K(in=in, load=l4p, address=address[2..13], out=out4);
+
+    Mux4Way16(a=out1, b=out2, c=out3, d=out4, sel=address[0..1], out=out);
 }
